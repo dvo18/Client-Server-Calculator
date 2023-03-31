@@ -1,15 +1,17 @@
 from calculadora import Calculadora
 from calculadora.ttypes import Param
-from calculadora.ttypes import Tipo
+from decimal import Decimal, ROUND_HALF_UP
+import sys
 
 from thrift import Thrift
 from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
-def r(f):
-    res = round(f,3)
-    return str(res).rstrip('0').rstrip('.')
+def r(p):
+    if p.f !=None: return round(p.f,3) if p.f!=round(p.f) else int(p.f)
+    elif p.v !=None: return [ round(x,3) if x!=round(x) else int(x) for x in p.v ]
+    else: return [ [ round(c,3) if c!=round(c) else int(c) for c in f ] for f in p.m ]
 
 transport = TSocket.TSocket("localhost", 9090)
 transport = TTransport.TBufferedTransport(transport)
@@ -22,11 +24,16 @@ transport.open()
 print("hacemos ping al server")
 client.ping()
 
-p1 = Param(t=1,p=Tipo(f=1))
-p2 = Param(t=2,p=Tipo(v=[2,3,4]))
+p1 = Param(v=[0.4635,3.000,0,1])
+p2 = Param(m=[[1,1,1],[2,2,2],[0.1,0,1.5325],[0,0,0]])        # no hay error si alguna de las filas es menor arreglar
 
-resultado = client.suma(p1, p2)
-for f in resultado.p.v:
-    print(r(f))
+try:
+    resultado = client.suma(p1, p2)
+    if resultado.f==None and resultado.v==None and resultado.m==None: raise ValueError
+except ValueError:
+    print("---la operación no se ha realizado correctamente---")
+    sys.exit
+else:
+    print(r(resultado))
 
 transport.close()

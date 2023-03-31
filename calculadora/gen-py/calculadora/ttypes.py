@@ -16,7 +16,7 @@ from thrift.transport import TTransport
 all_structs = []
 
 
-class Tipo(object):
+class Param(object):
     """
     Attributes:
      - f
@@ -79,7 +79,7 @@ class Tipo(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('Tipo')
+        oprot.writeStructBegin('Param')
         if self.f is not None:
             oprot.writeFieldBegin('f', TType.DOUBLE, 1)
             oprot.writeDouble(self.f)
@@ -117,87 +117,12 @@ class Tipo(object):
 
     def __ne__(self, other):
         return not (self == other)
-
-
-class Param(object):
-    """
-    Attributes:
-     - t
-     - p
-
-    """
-
-
-    def __init__(self, t=None, p=None,):
-        self.t = t
-        self.p = p
-
-    def read(self, iprot):
-        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
-            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
-            return
-        iprot.readStructBegin()
-        while True:
-            (fname, ftype, fid) = iprot.readFieldBegin()
-            if ftype == TType.STOP:
-                break
-            if fid == 1:
-                if ftype == TType.I32:
-                    self.t = iprot.readI32()
-                else:
-                    iprot.skip(ftype)
-            elif fid == 2:
-                if ftype == TType.STRUCT:
-                    self.p = Tipo()
-                    self.p.read(iprot)
-                else:
-                    iprot.skip(ftype)
-            else:
-                iprot.skip(ftype)
-            iprot.readFieldEnd()
-        iprot.readStructEnd()
-
-    def write(self, oprot):
-        if oprot._fast_encode is not None and self.thrift_spec is not None:
-            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
-            return
-        oprot.writeStructBegin('Param')
-        if self.t is not None:
-            oprot.writeFieldBegin('t', TType.I32, 1)
-            oprot.writeI32(self.t)
-            oprot.writeFieldEnd()
-        if self.p is not None:
-            oprot.writeFieldBegin('p', TType.STRUCT, 2)
-            self.p.write(oprot)
-            oprot.writeFieldEnd()
-        oprot.writeFieldStop()
-        oprot.writeStructEnd()
-
-    def validate(self):
-        return
-
-    def __repr__(self):
-        L = ['%s=%r' % (key, value)
-             for key, value in self.__dict__.items()]
-        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
-
-    def __eq__(self, other):
-        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
-
-    def __ne__(self, other):
-        return not (self == other)
-all_structs.append(Tipo)
-Tipo.thrift_spec = (
+all_structs.append(Param)
+Param.thrift_spec = (
     None,  # 0
     (1, TType.DOUBLE, 'f', None, None, ),  # 1
     (2, TType.LIST, 'v', (TType.DOUBLE, None, False), None, ),  # 2
     (3, TType.LIST, 'm', (TType.LIST, (TType.DOUBLE, None, False), False), None, ),  # 3
-)
-all_structs.append(Param)
-Param.thrift_spec = (
-    None,  # 0
-    (1, TType.I32, 't', None, None, ),  # 1
-    (2, TType.STRUCT, 'p', [Tipo, None], None, ),  # 2
 )
 fix_spec(all_structs)
 del all_structs
