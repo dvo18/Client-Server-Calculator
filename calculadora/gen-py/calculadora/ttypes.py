@@ -16,6 +16,33 @@ from thrift.transport import TTransport
 all_structs = []
 
 
+class Trig(object):
+    SIN = 1
+    COS = 2
+    TAN = 3
+    ARCSIN = 4
+    ARCCOS = 5
+    ARCTAN = 6
+
+    _VALUES_TO_NAMES = {
+        1: "SIN",
+        2: "COS",
+        3: "TAN",
+        4: "ARCSIN",
+        5: "ARCCOS",
+        6: "ARCTAN",
+    }
+
+    _NAMES_TO_VALUES = {
+        "SIN": 1,
+        "COS": 2,
+        "TAN": 3,
+        "ARCSIN": 4,
+        "ARCCOS": 5,
+        "ARCTAN": 6,
+    }
+
+
 class Param(object):
     """
     Attributes:

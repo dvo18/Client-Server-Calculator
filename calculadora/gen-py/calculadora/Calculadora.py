@@ -31,6 +31,42 @@ class Iface(object):
         """
         pass
 
+    def resta(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        pass
+
+    def multiplicacion(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        pass
+
+    def division(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        pass
+
+    def trigonometria(self, p1, func):
+        """
+        Parameters:
+         - p1
+         - func
+
+        """
+        pass
+
 
 class Client(Iface):
     def __init__(self, iprot, oprot=None):
@@ -97,6 +133,142 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "suma failed: unknown result")
 
+    def resta(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        self.send_resta(p1, p2)
+        return self.recv_resta()
+
+    def send_resta(self, p1, p2):
+        self._oprot.writeMessageBegin('resta', TMessageType.CALL, self._seqid)
+        args = resta_args()
+        args.p1 = p1
+        args.p2 = p2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_resta(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = resta_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta failed: unknown result")
+
+    def multiplicacion(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        self.send_multiplicacion(p1, p2)
+        return self.recv_multiplicacion()
+
+    def send_multiplicacion(self, p1, p2):
+        self._oprot.writeMessageBegin('multiplicacion', TMessageType.CALL, self._seqid)
+        args = multiplicacion_args()
+        args.p1 = p1
+        args.p2 = p2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_multiplicacion(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = multiplicacion_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "multiplicacion failed: unknown result")
+
+    def division(self, p1, p2):
+        """
+        Parameters:
+         - p1
+         - p2
+
+        """
+        self.send_division(p1, p2)
+        return self.recv_division()
+
+    def send_division(self, p1, p2):
+        self._oprot.writeMessageBegin('division', TMessageType.CALL, self._seqid)
+        args = division_args()
+        args.p1 = p1
+        args.p2 = p2
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_division(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = division_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "division failed: unknown result")
+
+    def trigonometria(self, p1, func):
+        """
+        Parameters:
+         - p1
+         - func
+
+        """
+        self.send_trigonometria(p1, func)
+        return self.recv_trigonometria()
+
+    def send_trigonometria(self, p1, func):
+        self._oprot.writeMessageBegin('trigonometria', TMessageType.CALL, self._seqid)
+        args = trigonometria_args()
+        args.p1 = p1
+        args.func = func
+        args.write(self._oprot)
+        self._oprot.writeMessageEnd()
+        self._oprot.trans.flush()
+
+    def recv_trigonometria(self):
+        iprot = self._iprot
+        (fname, mtype, rseqid) = iprot.readMessageBegin()
+        if mtype == TMessageType.EXCEPTION:
+            x = TApplicationException()
+            x.read(iprot)
+            iprot.readMessageEnd()
+            raise x
+        result = trigonometria_result()
+        result.read(iprot)
+        iprot.readMessageEnd()
+        if result.success is not None:
+            return result.success
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "trigonometria failed: unknown result")
+
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
@@ -104,6 +276,10 @@ class Processor(Iface, TProcessor):
         self._processMap = {}
         self._processMap["ping"] = Processor.process_ping
         self._processMap["suma"] = Processor.process_suma
+        self._processMap["resta"] = Processor.process_resta
+        self._processMap["multiplicacion"] = Processor.process_multiplicacion
+        self._processMap["division"] = Processor.process_division
+        self._processMap["trigonometria"] = Processor.process_trigonometria
         self._on_message_begin = None
 
     def on_message_begin(self, func):
@@ -168,6 +344,98 @@ class Processor(Iface, TProcessor):
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
         oprot.writeMessageBegin("suma", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_resta(self, seqid, iprot, oprot):
+        args = resta_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = resta_result()
+        try:
+            result.success = self._handler.resta(args.p1, args.p2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("resta", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_multiplicacion(self, seqid, iprot, oprot):
+        args = multiplicacion_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = multiplicacion_result()
+        try:
+            result.success = self._handler.multiplicacion(args.p1, args.p2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("multiplicacion", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_division(self, seqid, iprot, oprot):
+        args = division_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = division_result()
+        try:
+            result.success = self._handler.division(args.p1, args.p2)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("division", msg_type, seqid)
+        result.write(oprot)
+        oprot.writeMessageEnd()
+        oprot.trans.flush()
+
+    def process_trigonometria(self, seqid, iprot, oprot):
+        args = trigonometria_args()
+        args.read(iprot)
+        iprot.readMessageEnd()
+        result = trigonometria_result()
+        try:
+            result.success = self._handler.trigonometria(args.p1, args.func)
+            msg_type = TMessageType.REPLY
+        except TTransport.TTransportException:
+            raise
+        except TApplicationException as ex:
+            logging.exception('TApplication exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = ex
+        except Exception:
+            logging.exception('Unexpected exception in handler')
+            msg_type = TMessageType.EXCEPTION
+            result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
+        oprot.writeMessageBegin("trigonometria", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -395,6 +663,557 @@ class suma_result(object):
         return not (self == other)
 all_structs.append(suma_result)
 suma_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [Param, None], None, ),  # 0
+)
+
+
+class resta_args(object):
+    """
+    Attributes:
+     - p1
+     - p2
+
+    """
+
+
+    def __init__(self, p1=None, p2=None,):
+        self.p1 = p1
+        self.p2 = p2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.p1 = Param()
+                    self.p1.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRUCT:
+                    self.p2 = Param()
+                    self.p2.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_args')
+        if self.p1 is not None:
+            oprot.writeFieldBegin('p1', TType.STRUCT, 1)
+            self.p1.write(oprot)
+            oprot.writeFieldEnd()
+        if self.p2 is not None:
+            oprot.writeFieldBegin('p2', TType.STRUCT, 2)
+            self.p2.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_args)
+resta_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'p1', [Param, None], None, ),  # 1
+    (2, TType.STRUCT, 'p2', [Param, None], None, ),  # 2
+)
+
+
+class resta_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = Param()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('resta_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(resta_result)
+resta_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [Param, None], None, ),  # 0
+)
+
+
+class multiplicacion_args(object):
+    """
+    Attributes:
+     - p1
+     - p2
+
+    """
+
+
+    def __init__(self, p1=None, p2=None,):
+        self.p1 = p1
+        self.p2 = p2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.p1 = Param()
+                    self.p1.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRUCT:
+                    self.p2 = Param()
+                    self.p2.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('multiplicacion_args')
+        if self.p1 is not None:
+            oprot.writeFieldBegin('p1', TType.STRUCT, 1)
+            self.p1.write(oprot)
+            oprot.writeFieldEnd()
+        if self.p2 is not None:
+            oprot.writeFieldBegin('p2', TType.STRUCT, 2)
+            self.p2.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(multiplicacion_args)
+multiplicacion_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'p1', [Param, None], None, ),  # 1
+    (2, TType.STRUCT, 'p2', [Param, None], None, ),  # 2
+)
+
+
+class multiplicacion_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = Param()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('multiplicacion_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(multiplicacion_result)
+multiplicacion_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [Param, None], None, ),  # 0
+)
+
+
+class division_args(object):
+    """
+    Attributes:
+     - p1
+     - p2
+
+    """
+
+
+    def __init__(self, p1=None, p2=None,):
+        self.p1 = p1
+        self.p2 = p2
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.p1 = Param()
+                    self.p1.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.STRUCT:
+                    self.p2 = Param()
+                    self.p2.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('division_args')
+        if self.p1 is not None:
+            oprot.writeFieldBegin('p1', TType.STRUCT, 1)
+            self.p1.write(oprot)
+            oprot.writeFieldEnd()
+        if self.p2 is not None:
+            oprot.writeFieldBegin('p2', TType.STRUCT, 2)
+            self.p2.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(division_args)
+division_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'p1', [Param, None], None, ),  # 1
+    (2, TType.STRUCT, 'p2', [Param, None], None, ),  # 2
+)
+
+
+class division_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = Param()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('division_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(division_result)
+division_result.thrift_spec = (
+    (0, TType.STRUCT, 'success', [Param, None], None, ),  # 0
+)
+
+
+class trigonometria_args(object):
+    """
+    Attributes:
+     - p1
+     - func
+
+    """
+
+
+    def __init__(self, p1=None, func=None,):
+        self.p1 = p1
+        self.func = func
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 1:
+                if ftype == TType.STRUCT:
+                    self.p1 = Param()
+                    self.p1.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            elif fid == 2:
+                if ftype == TType.I32:
+                    self.func = iprot.readI32()
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('trigonometria_args')
+        if self.p1 is not None:
+            oprot.writeFieldBegin('p1', TType.STRUCT, 1)
+            self.p1.write(oprot)
+            oprot.writeFieldEnd()
+        if self.func is not None:
+            oprot.writeFieldBegin('func', TType.I32, 2)
+            oprot.writeI32(self.func)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(trigonometria_args)
+trigonometria_args.thrift_spec = (
+    None,  # 0
+    (1, TType.STRUCT, 'p1', [Param, None], None, ),  # 1
+    (2, TType.I32, 'func', None, None, ),  # 2
+)
+
+
+class trigonometria_result(object):
+    """
+    Attributes:
+     - success
+
+    """
+
+
+    def __init__(self, success=None,):
+        self.success = success
+
+    def read(self, iprot):
+        if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
+            iprot._fast_decode(self, iprot, [self.__class__, self.thrift_spec])
+            return
+        iprot.readStructBegin()
+        while True:
+            (fname, ftype, fid) = iprot.readFieldBegin()
+            if ftype == TType.STOP:
+                break
+            if fid == 0:
+                if ftype == TType.STRUCT:
+                    self.success = Param()
+                    self.success.read(iprot)
+                else:
+                    iprot.skip(ftype)
+            else:
+                iprot.skip(ftype)
+            iprot.readFieldEnd()
+        iprot.readStructEnd()
+
+    def write(self, oprot):
+        if oprot._fast_encode is not None and self.thrift_spec is not None:
+            oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
+            return
+        oprot.writeStructBegin('trigonometria_result')
+        if self.success is not None:
+            oprot.writeFieldBegin('success', TType.STRUCT, 0)
+            self.success.write(oprot)
+            oprot.writeFieldEnd()
+        oprot.writeFieldStop()
+        oprot.writeStructEnd()
+
+    def validate(self):
+        return
+
+    def __repr__(self):
+        L = ['%s=%r' % (key, value)
+             for key, value in self.__dict__.items()]
+        return '%s(%s)' % (self.__class__.__name__, ', '.join(L))
+
+    def __eq__(self, other):
+        return isinstance(other, self.__class__) and self.__dict__ == other.__dict__
+
+    def __ne__(self, other):
+        return not (self == other)
+all_structs.append(trigonometria_result)
+trigonometria_result.thrift_spec = (
     (0, TType.STRUCT, 'success', [Param, None], None, ),  # 0
 )
 fix_spec(all_structs)
