@@ -24,11 +24,11 @@ transport.open()
 print("hacemos ping al server")
 client.ping()
 
-p1 = Param(v=[0.4635,3.000,0,1])
-p2 = Param(m=[[1,1,1],[2,2,2],[0.1,0,1.5325],[0,0,0]])        # no hay error si alguna de las filas es menor arreglar
+p1 = Param(f=1)
+p2 = Param(f=1)        # no hay error si alguna de las filas es menor arreglar
 
 try:
-    resultado = client.suma(p1, p2)
+    resultado = client.res
     if resultado.f==None and resultado.v==None and resultado.m==None: raise ValueError
 except ValueError:
     print("---la operación no se ha realizado correctamente---")
