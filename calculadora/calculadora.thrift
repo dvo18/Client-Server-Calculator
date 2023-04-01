@@ -18,7 +18,7 @@ service Calculadora{
    void ping(),
    Param suma(1:Param p1, 2:Param p2),
    Param resta(1:Param p1, 2:Param p2),
-   Param multiplicacion(1:Param p1, 2:Param p2),
+   Param multiplicacion(1:Param p1, 2:Param p2, 3:bool prodVec),
    Param division(1:Param p1, 2:Param p2),
    Param trigonometria(1:Param p1, 2:Trig func),
 }

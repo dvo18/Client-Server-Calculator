@@ -40,11 +40,12 @@ class Iface(object):
         """
         pass
 
-    def multiplicacion(self, p1, p2):
+    def multiplicacion(self, p1, p2, prodVec):
         """
         Parameters:
          - p1
          - p2
+         - prodVec
 
         """
         pass
@@ -167,21 +168,23 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "resta failed: unknown result")
 
-    def multiplicacion(self, p1, p2):
+    def multiplicacion(self, p1, p2, prodVec):
         """
         Parameters:
          - p1
          - p2
+         - prodVec
 
         """
-        self.send_multiplicacion(p1, p2)
+        self.send_multiplicacion(p1, p2, prodVec)
         return self.recv_multiplicacion()
 
-    def send_multiplicacion(self, p1, p2):
+    def send_multiplicacion(self, p1, p2, prodVec):
         self._oprot.writeMessageBegin('multiplicacion', TMessageType.CALL, self._seqid)
         args = multiplicacion_args()
         args.p1 = p1
         args.p2 = p2
+        args.prodVec = prodVec
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -377,7 +380,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = multiplicacion_result()
         try:
-            result.success = self._handler.multiplicacion(args.p1, args.p2)
+            result.success = self._handler.multiplicacion(args.p1, args.p2, args.prodVec)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -810,13 +813,15 @@ class multiplicacion_args(object):
     Attributes:
      - p1
      - p2
+     - prodVec
 
     """
 
 
-    def __init__(self, p1=None, p2=None,):
+    def __init__(self, p1=None, p2=None, prodVec=None,):
         self.p1 = p1
         self.p2 = p2
+        self.prodVec = prodVec
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -839,6 +844,11 @@ class multiplicacion_args(object):
                     self.p2.read(iprot)
                 else:
                     iprot.skip(ftype)
+            elif fid == 3:
+                if ftype == TType.BOOL:
+                    self.prodVec = iprot.readBool()
+                else:
+                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -856,6 +866,10 @@ class multiplicacion_args(object):
         if self.p2 is not None:
             oprot.writeFieldBegin('p2', TType.STRUCT, 2)
             self.p2.write(oprot)
+            oprot.writeFieldEnd()
+        if self.prodVec is not None:
+            oprot.writeFieldBegin('prodVec', TType.BOOL, 3)
+            oprot.writeBool(self.prodVec)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -878,6 +892,7 @@ multiplicacion_args.thrift_spec = (
     None,  # 0
     (1, TType.STRUCT, 'p1', [Param, None], None, ),  # 1
     (2, TType.STRUCT, 'p2', [Param, None], None, ),  # 2
+    (3, TType.BOOL, 'prodVec', None, None, ),  # 3
 )
 
 

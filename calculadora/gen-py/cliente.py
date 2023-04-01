@@ -8,6 +8,8 @@ from thrift.transport import TSocket
 from thrift.transport import TTransport
 from thrift.protocol import TBinaryProtocol
 
+prodVec = True
+
 def r(p):
     if p.f !=None: return round(p.f,3) if p.f!=round(p.f) else int(p.f)
     elif p.v !=None: return [ round(x,3) if x!=round(x) else int(x) for x in p.v ]
@@ -24,11 +26,11 @@ transport.open()
 print("hacemos ping al server")
 client.ping()
 
-p1 = Param(m=[[0,0],[0,0],[1,1]])
-p2 = Param(m=[[1,1],[1,1],[1,1]])        # no hay error si alguna de las filas es menor arreglar
+p1 = Param(v=[1,2,1])
+p2 = Param(v=[1])        # no hay error si alguna de las filas es menor arreglar
 
 try:
-    resultado = client.resta(p1,p2)
+    resultado = client.multiplicacion(p1,p2,prodVec)
     if resultado.f==None and resultado.v==None and resultado.m==None: raise ValueError
 except ValueError:
     print("---la operación no se ha realizado correctamente---")
