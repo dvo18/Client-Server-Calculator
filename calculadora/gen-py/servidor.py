@@ -21,10 +21,28 @@ def c(m):
 class CalculadoraHandler:
     def __init__(self):
         self.log = {}
+        self.msg_warning = ""
+        self.warnings = [
+            "\033[31m---\033[1;31merror\033[0;31m: el tamaño de todas las filas de las matrices debe ser el mismo---\033[0m",
+            "\033[31m---\033[1;31merror\033[0;31m: el tamaño del vector debe ser el mismo que el número de filas o columnas de la matriz---\033[0m",
+            "\033[31m---\033[1;31merror\033[0;31m: el número de columnas de la primera matriz debe ser igual al número de filas de la segunda---\033[0m",
+            "\033[31m---\033[1;31merror\033[0;31m: el formato de los parámetros no es correcto---\033[0m",
+            "\033[31m---\033[1;31merror\033[0;31m: no se puede dividir por cero (contiene el cero)---\033[0m",
+            "\033[31m---\033[1;31merror\033[0;31m: el tamaño de las matrices debe ser el mismo---\033[0m"
+        ]
 
     def ping(self):
-        print("me han hecho ping()")
+        self.msg_warning = ""
+        return "ping() recibido"
+    
+    def setWarnings(self,tipo):
+        if tipo>=0 and tipo<=len(self.warnings):
+            for i in range(len(self.warnings)):
+                msg += self.warnings[i] + "\n"
 
+    def getWarnings(self,tipo):
+        if self.msg !="": return self.msg
+        else: return None
 
     def suma(self, p1, p2):
         try:

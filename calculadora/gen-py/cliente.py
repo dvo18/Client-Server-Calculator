@@ -10,7 +10,7 @@ from thrift.protocol import TBinaryProtocol
 
 import tkinter as tk
 
-
+"""
 prodVec = True
 
 def r(p):
@@ -42,12 +42,14 @@ else:
     print(r(resultado))
 
 transport.close()
-
+"""
 
 class App:
     def __init__(self,master):
         # Crear ventana principal
         self.master = master
+        self.master.protocol("WM_DELETE_WINDOW", self.cerrar_ventana)
+
         self.master.title("Ejemplo de Interfaz")
         self.master.geometry("600x400")
 
@@ -68,28 +70,28 @@ class App:
         self.message_list.pack(side=tk.BOTTOM, fill=tk.BOTH, expand=True)
 
         # Crear columnas de servidor y cliente
-        self.server_list = tk.Listbox(self.master, width=20)
+        self.server_list = tk.Listbox(self.master, width=15)
         self.server_list.pack(side=tk.LEFT, fill=tk.Y)
         self.server_list.insert(tk.END, "Servidor")
-        self.client_list = tk.Listbox(self.master, width=20)
+        self.client_list = tk.Listbox(self.master, width=15)
         self.client_list.pack(side=tk.RIGHT, fill=tk.Y)
         self.client_list.insert(tk.END, "Cliente")
 
-        transport = TSocket.TSocket("localhost", 9090)
-        transport = TTransport.TBufferedTransport(transport)
-        protocol = TBinaryProtocol.TBinaryProtocol(transport)
+        self.transport = TSocket.TSocket("localhost", 9090)
+        self.transport = TTransport.TBufferedTransport(self.transport)
+        protocol = TBinaryProtocol.TBinaryProtocol(self.transport)
 
-        client = Calculadora.Client(protocol)
+        self.client = Calculadora.Client(protocol)
 
-        transport.open()
+        self.transport.open()
 
-    def ping_msg(self, is_server):
-        if is_server: self.server_list.insert(tk.END,"ping recibido")
-        else: self.client_list.insert(tk.END,"ping enviado")
+    def cerrar_ventana(self):
+        self.transport.close()
+        self.master.destroy()
 
     def calculate(self):
-        self.ping_msg(False)
-        client.ping()
+        self.client_list.insert(tk.END,"ping() enviado")
+        self.server_list.insert(tk.END,self.client.ping())
 
         # Obtener texto del cuadro de texto
         text = self.textbox.get()
@@ -103,15 +105,18 @@ class App:
         if message:
             self.message_list.insert(tk.END, message)
 
+
     def do_calculation(self, text):
         # Aquí iría el código para realizar el cálculo
         # En este ejemplo, simplemente se devuelve el texto al revés
         return text[::-1]
+        # return "---la operación no se ha realizado correctamente---"
+
 
     def get_message(self):
         try:
-            
-        except ValueError: return "---la operación no se ha realizado correctamente---"
+            return self.client.getWarnings()
+        except ValueError: return "---****---"
 
 root = tk.Tk()
 app = App(root)

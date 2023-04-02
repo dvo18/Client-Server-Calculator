@@ -24,12 +24,13 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  void ping()')
+    print('  string ping()')
     print('  Param suma(Param p1, Param p2)')
     print('  Param resta(Param p1, Param p2)')
     print('  Param multiplicacion(Param p1, Param p2, bool prodVec)')
     print('  Param division(Param p1, Param p2)')
     print('  Param trigonometria(Param p1, Trig func)')
+    print('  string getWarnings(i32 tipo)')
     print('')
     sys.exit(0)
 
@@ -144,6 +145,12 @@ elif cmd == 'trigonometria':
         print('trigonometria requires 2 args')
         sys.exit(1)
     pp.pprint(client.trigonometria(eval(args[0]), eval(args[1]),))
+
+elif cmd == 'getWarnings':
+    if len(args) != 1:
+        print('getWarnings requires 1 args')
+        sys.exit(1)
+    pp.pprint(client.getWarnings(eval(args[0]),))
 
 else:
     print('Unrecognized method %s' % cmd)
