@@ -23,6 +23,9 @@ class Trig(object):
     ARCSIN = 4
     ARCCOS = 5
     ARCTAN = 6
+    ARCSINH = 7
+    ARCCOSH = 8
+    ARCTANH = 9
 
     _VALUES_TO_NAMES = {
         1: "SIN",
@@ -31,6 +34,9 @@ class Trig(object):
         4: "ARCSIN",
         5: "ARCCOS",
         6: "ARCTAN",
+        7: "ARCSINH",
+        8: "ARCCOSH",
+        9: "ARCTANH",
     }
 
     _NAMES_TO_VALUES = {
@@ -40,6 +46,9 @@ class Trig(object):
         "ARCSIN": 4,
         "ARCCOS": 5,
         "ARCTAN": 6,
+        "ARCSINH": 7,
+        "ARCCOSH": 8,
+        "ARCTANH": 9,
     }
 
 

@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 from calculadora import Calculadora
-from calculadora.ttypes import Param
+from calculadora.ttypes import Param, Trig
 
 from thrift.transport import TSocket
 from thrift.transport import TTransport
@@ -196,10 +196,10 @@ class CalculadoraHandler:
                     if p2.f!=0: p2.f = 1/p2.f
                     else: raise ZeroDivisionError
                 elif p2.v !=None:
-                    if not 0 in p2.v: p2.v = [ 1/x for x in p2.v ]
+                    if not 0 in p2.v: p2.v = [ -x/len(p2.v)**2 for x in p2.v ]        # inverso multiplicativo
                     else: raise ZeroDivisionError
                 elif p2.m !=None: 
-                    if not any(0 in f for f in p2.m): p2.m = [ [ 1/c for c in f ] for f in p2.m ]
+                    if not any(0 in f for f in p2.m): p2.m = np.linalg.inv(np.array(p2.m)).tolist()
                     else: raise ZeroDivisionError
                 else: raise TypeError
 
@@ -207,6 +207,50 @@ class CalculadoraHandler:
             except ZeroDivisionError: print("\033[31m---\033[1;31merror\033[0;31m: no se puede dividir por cero (contiene el cero)---\033[0m")
         except TypeError: print("\033[31m---\033[1;31merror\033[0;31m: el formato de los parámetros no es correcto---\033[0m")
 
+    def trigonometria(self, p, t):
+        
+        newp = Param()
+        n = None
+        r = None
+
+        try:
+            if p.f !=None: n=p.f
+            elif p.v !=None: n=np.array(p.v)
+            elif p.m !=None: n=np.array(p.m)
+            else: raise TypeError
+
+            try:
+                if t is Trig.SIN: r=np.sin(n)
+                elif t is Trig.COS: r=np.cos(n)
+                elif t is Trig.TAN: r=np.tan(n)
+
+                elif t is Trig.ARCCOS: 
+                    if (p.f!=None and n>=-1 and n<=1) or (p.v!=None and np.all((-1<=n)&(n<=1))) or (p.m!=None and np.all((-1<=n)&(n<=1))):
+                        r=np.arcsin(n)
+                    else: print("\033[31m---\033[1;31merror\033[0;31m: el valor debe estar entre -1 y 1---\033[0m")
+                elif t is Trig.ARCSIN:
+                    if (p.f!=None and n>=-1 and n<=1) or (p.v!=None and np.all((-1<=n)&(n<=1))) or (p.m!=None and np.all((-1<=n)&(n<=1))):
+                        r=np.arccos(n)
+                    else: print("\033[31m---\033[1;31merror\033[0;31m: el valor debe estar entre -1 y 1---\033[0m")
+                elif t is Trig.ARCTAN:
+                    if (p.f!=None and n>=-1 and n<=1) or (p.v!=None and np.all((-1<=n)&(n<=1))) or (p.m!=None and np.all((-1<=n)&(n<=1))):
+                        r=np.arctan(n)
+                    else: print("\033[31m---\033[1;31merror\033[0;31m: el valor debe estar entre -1 y 1---\033[0m")
+                
+                elif t is Trig.ARCSINH: r=np.arcsinh(n)
+                elif t is Trig.ARCCOSH: r=np.arccosh(n)
+                else:  raise TypeError
+
+            except TypeError as t1: print("\033[31m---\033[1;31merror\033[0;31m: la función trigonométrica no existe o no se ha implementado aún---\033[0m")  
+        
+            if p.f !=None: newp.f=r
+            elif p.v !=None: newp.v=r
+            elif p.m !=None: newp.m=r
+            else: TypeError
+            
+        except TypeError as t2: print("\033[31m---\033[1;31merror\033[0;31m: el formato del parámetro no es correcto---\033[0m")
+
+        return newp
 
 
 if __name__ == "__main__":

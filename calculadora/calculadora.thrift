@@ -11,7 +11,10 @@ enum Trig {
     TAN=3,
     ARCSIN=4,
     ARCCOS=5,
-    ARCTAN=6
+    ARCTAN=6,
+    ARCSINH=7,
+    ARCCOSH=8,
+    ARCTANH=9
 }
 
 service Calculadora{
