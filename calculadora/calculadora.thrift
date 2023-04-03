@@ -40,5 +40,5 @@ service Calculadora{
    Param multiplicacion(1:Param p1, 2:Param p2, 3:bool prodVec),
    Param division(1:Param p1, 2:Param p2),
    Param trigonometria(1:Param p1, 2:Trig func),
-   string getWarnings(1:i32 tipo),
+   string getWarnings(),
 }

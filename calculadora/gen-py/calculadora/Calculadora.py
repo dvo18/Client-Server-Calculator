@@ -68,12 +68,7 @@ class Iface(object):
         """
         pass
 
-    def getWarnings(self, tipo):
-        """
-        Parameters:
-         - tipo
-
-        """
+    def getWarnings(self):
         pass
 
 
@@ -282,19 +277,13 @@ class Client(Iface):
             return result.success
         raise TApplicationException(TApplicationException.MISSING_RESULT, "trigonometria failed: unknown result")
 
-    def getWarnings(self, tipo):
-        """
-        Parameters:
-         - tipo
-
-        """
-        self.send_getWarnings(tipo)
+    def getWarnings(self):
+        self.send_getWarnings()
         return self.recv_getWarnings()
 
-    def send_getWarnings(self, tipo):
+    def send_getWarnings(self):
         self._oprot.writeMessageBegin('getWarnings', TMessageType.CALL, self._seqid)
         args = getWarnings_args()
-        args.tipo = tipo
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
@@ -492,7 +481,7 @@ class Processor(Iface, TProcessor):
         iprot.readMessageEnd()
         result = getWarnings_result()
         try:
-            result.success = self._handler.getWarnings(args.tipo)
+            result.success = self._handler.getWarnings()
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -1318,15 +1307,7 @@ trigonometria_result.thrift_spec = (
 
 
 class getWarnings_args(object):
-    """
-    Attributes:
-     - tipo
 
-    """
-
-
-    def __init__(self, tipo=None,):
-        self.tipo = tipo
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -1337,11 +1318,6 @@ class getWarnings_args(object):
             (fname, ftype, fid) = iprot.readFieldBegin()
             if ftype == TType.STOP:
                 break
-            if fid == 1:
-                if ftype == TType.I32:
-                    self.tipo = iprot.readI32()
-                else:
-                    iprot.skip(ftype)
             else:
                 iprot.skip(ftype)
             iprot.readFieldEnd()
@@ -1352,10 +1328,6 @@ class getWarnings_args(object):
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
         oprot.writeStructBegin('getWarnings_args')
-        if self.tipo is not None:
-            oprot.writeFieldBegin('tipo', TType.I32, 1)
-            oprot.writeI32(self.tipo)
-            oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -1374,8 +1346,6 @@ class getWarnings_args(object):
         return not (self == other)
 all_structs.append(getWarnings_args)
 getWarnings_args.thrift_spec = (
-    None,  # 0
-    (1, TType.I32, 'tipo', None, None, ),  # 1
 )
 
 
