@@ -252,7 +252,7 @@ class CalculadoraHandler:
                 elif t is Trig.COS: r=np.cos(n)
                 elif t is Trig.TAN: r=np.tan(n)
 
-                elif t is Trig.ARCCOS:
+                elif t is Trig.ARCCOS: 
                     if (p.f!=None and n>=-1 and n<=1) or (p.v!=None and np.all((-1<=n)&(n<=1))) or (p.m!=None and np.all((-1<=n)&(n<=1))):
                         r=np.arcsin(n)
                     else: self.setWarnings(13)

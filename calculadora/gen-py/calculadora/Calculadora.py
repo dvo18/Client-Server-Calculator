@@ -1370,8 +1370,13 @@ class getWarnings_result(object):
             if ftype == TType.STOP:
                 break
             if fid == 0:
-                if ftype == TType.STRING:
-                    self.success = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                if ftype == TType.LIST:
+                    self.success = []
+                    (_etype24, _size21) = iprot.readListBegin()
+                    for _i25 in range(_size21):
+                        _elem26 = iprot.readString().decode('utf-8', errors='replace') if sys.version_info[0] == 2 else iprot.readString()
+                        self.success.append(_elem26)
+                    iprot.readListEnd()
                 else:
                     iprot.skip(ftype)
             else:
@@ -1385,8 +1390,11 @@ class getWarnings_result(object):
             return
         oprot.writeStructBegin('getWarnings_result')
         if self.success is not None:
-            oprot.writeFieldBegin('success', TType.STRING, 0)
-            oprot.writeString(self.success.encode('utf-8') if sys.version_info[0] == 2 else self.success)
+            oprot.writeFieldBegin('success', TType.LIST, 0)
+            oprot.writeListBegin(TType.STRING, len(self.success))
+            for iter27 in self.success:
+                oprot.writeString(iter27.encode('utf-8') if sys.version_info[0] == 2 else iter27)
+            oprot.writeListEnd()
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
@@ -1406,7 +1414,7 @@ class getWarnings_result(object):
         return not (self == other)
 all_structs.append(getWarnings_result)
 getWarnings_result.thrift_spec = (
-    (0, TType.STRING, 'success', 'UTF8', None, ),  # 0
+    (0, TType.LIST, 'success', (TType.STRING, 'UTF8', False), None, ),  # 0
 )
 fix_spec(all_structs)
 del all_structs

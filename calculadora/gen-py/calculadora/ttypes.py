@@ -52,54 +52,6 @@ class Trig(object):
     }
 
 
-class Op(object):
-    SUMA = 1
-    RESTA = 2
-    MULTIPLICACION = 3
-    DIVISION = 4
-    PROD_ESCALAR = 5
-    SIN = 6
-    COS = 7
-    TAN = 8
-    ARCSIN = 9
-    ARCCOS = 10
-    ARCTAN = 11
-    ARCSINH = 12
-    ARCCOSH = 13
-
-    _VALUES_TO_NAMES = {
-        1: "SUMA",
-        2: "RESTA",
-        3: "MULTIPLICACION",
-        4: "DIVISION",
-        5: "PROD_ESCALAR",
-        6: "SIN",
-        7: "COS",
-        8: "TAN",
-        9: "ARCSIN",
-        10: "ARCCOS",
-        11: "ARCTAN",
-        12: "ARCSINH",
-        13: "ARCCOSH",
-    }
-
-    _NAMES_TO_VALUES = {
-        "SUMA": 1,
-        "RESTA": 2,
-        "MULTIPLICACION": 3,
-        "DIVISION": 4,
-        "PROD_ESCALAR": 5,
-        "SIN": 6,
-        "COS": 7,
-        "TAN": 8,
-        "ARCSIN": 9,
-        "ARCCOS": 10,
-        "ARCTAN": 11,
-        "ARCSINH": 12,
-        "ARCCOSH": 13,
-    }
-
-
 class Param(object):
     """
     Attributes:

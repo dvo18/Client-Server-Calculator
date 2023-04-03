@@ -30,7 +30,7 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('  Param multiplicacion(Param p1, Param p2, bool prodVec)')
     print('  Param division(Param p1, Param p2)')
     print('  Param trigonometria(Param p1, Trig func)')
-    print('  string getWarnings()')
+    print('   getWarnings()')
     print('')
     sys.exit(0)
 
