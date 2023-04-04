@@ -101,6 +101,8 @@ class App:
 
                 self.message_list.insert(tk.END, message[i])
                 self.message_list.itemconfigure(self.message_list.size()-1, fg=color)
+                
+                #es para añadir los cambios, nada más
 
 
     def convertir_text(self,text):
